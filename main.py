@@ -55,8 +55,8 @@ async def relay_to_discord(
 ):
     # --- Authentication (Uncomment for production) ---
     # Note: Using optional authentication check here. If FORM_SECRET is missing, it skips auth.
-    if FORM_SECRET and x_secret != FORM_SECRET:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+    # if FORM_SECRET and x_secret != FORM_SECRET:
+    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
 
     # --- Server-Side Validation ---
 
