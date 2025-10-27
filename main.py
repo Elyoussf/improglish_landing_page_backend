@@ -35,16 +35,19 @@ PHONE_RE = re.compile(r"^\+\d{7,15}$")
 
 # Update the payload model to match the fields sent by the React frontend
 class ContactPayload(BaseModel):
-    name: str = Field(min_length=1, max_length=120)
-    phone: str
-    age: conint(ge=10, le=99)  # Expects an integer between 10 and 99
-    language: str = Field(min_length=2, max_length=5) # e.g., 'FR' or 'EN'
-    pack_name: str
-    pack_price_per_hour: str
-    pack_option_selected: str
-    availability_summary: str
-    message: Optional[str] = Field(default="N/A", max_length=2000)
-    # The frontend is sending a pre-formatted message. We capture it here.
+    # name: str = Field(min_length=1, max_length=120)
+    # phone: str
+    # age: conint(ge=10, le=99)  # Expects an integer between 10 and 99
+    # language: str = Field(min_length=2, max_length=5) # e.g., 'FR' or 'EN'
+    # study_language: str
+    # pack_name: str
+    # pack_total_price:str
+    # pack_total_hours:str
+    # pack_price_per_hour: str
+    # pack_option_selected: str
+    # availability_summary: str
+    # message: Optional[str] = Field(default="N/A", max_length=2000)
+    # # The frontend is sending a pre-formatted message. We capture it here.
     discord_message: str
 
 
@@ -53,26 +56,11 @@ async def relay_to_discord(
     body: ContactPayload,
     x_secret: str | None = Header(default=None, convert_underscores=False),
 ):
-    # --- Authentication (Uncomment for production) ---
-    # Note: Using optional authentication check here. If FORM_SECRET is missing, it skips auth.
-    # if FORM_SECRET and x_secret != FORM_SECRET:
-    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
-
-    # --- Server-Side Validation ---
-
-    # Clean and validate phone number (removes spaces, ensures international format)
-    cleaned_phone = body.phone.replace(" ", "")
-    if not PHONE_RE.match(cleaned_phone):
-        # We use 422 here, as the input structure was correct, but the data value (phone format) was invalid
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Invalid phone format. Must be international (e.g., +212...).")
+ 
     
-    # All other field validations (like min_length and age range) are handled automatically by Pydantic
+   
 
-    # --- Discord Relay ---
-
-    # The frontend has conveniently provided the entire discord_message string, which we will use directly
-    # We send the content as a raw string message, which often looks better than a generic embed.
-    # We still wrap it in a JSON payload required by the Discord Webhook API.
+   
     
     discord_payload = {
         "username": "Improglish Server", 
